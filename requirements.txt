@@ -10,3 +10,4 @@ unstructured
 rank_bm25
 transformers
 numpy==1.26.4
+langgraph

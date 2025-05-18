@@ -1,6 +1,6 @@
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
-import faiss_index
+import old.faiss_index as faiss_index
 
 class FAISSIndex:
     def __init__(self,nlist=100, m=8, n_bits=8):
