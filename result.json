@@ -1,0 +1,24 @@
+{
+    "misinformation_detected": true,
+    "transcript_chunk": "Diabetes occurs when Pancreas creates excess insulin. Many people with diabetes also develop high blood pressure.",
+    "evidence": "What causes type 2 diabetes?\nType 2 diabetes is the most common form of diabetes. Type 2 diabetes develops when your pancreas doesn\u2019t produce enough insulin, and your body has trouble using insulin, a condition called insulin resistance. Insulin resistance is when the cells in your muscles, fat, and liver don\u2019t respond well to insulin. When there isn\u2019t enough insulin to balance blood glucose levels, they begin to rise.\nWhen blood glucose levels are higher than normal but not high enough to be diagnosed as type 2 diabetes, you have a condition called prediabetes. You have type 2 diabetes when health care professionals diagnose your blood glucose level as being too high.\nResearchers don\u2019t fully know what causes problems with insulin production and insulin resistance in type 2 diabetes. However, people are more likely to develop type 2 diabetes if they\nhave overweight, obesity, or a large waist size.\nPancreatic islet and pancreas transplant\nPancreatic islet transplant\nA pancreatic islet transplant is used to treat type 1 diabetes in people who struggle to manage their blood glucose levels. Pancreatic islets are clusters of cells in the pancreas that make insulin. In type 1 diabetes, the body\u2019s immune system attacks these cells. A pancreatic islet transplant replaces destroyed islets with new islets from a deceased donor. The new islets make and release insulin. After a pancreatic islet transplant, you\u2019ll take immunosuppressants to prevent the immune system from attacking and destroying the new islets.\nPancreas transplant\nProtect your kidneys by keeping your blood pressure under control.\nMedicines that lower blood pressure can also help slow kidney damage. Two types of blood pressure medicines, ACE inhibitors and ARBs, play a special role in protecting your kidneys. Each has been found to slow kidney damage in people with diabetes who have high blood pressure and DKD. The names of these medicines end in \u2013pril or \u2013sartan. ACE inhibitors and ARBs are not safe for women who are pregnant.\nDevelop or maintain healthy lifestyle habits\nHealthy lifestyle habits can help you reach your blood glucose and blood pressure goals. Following the steps below will also help you keep your kidneys healthy\nStop smoking.\nWork with a dietitian to develop a diabetes meal plan and limit salt and sodium.\nMake physical activity part of your routine.\nStay at or get to a healthy weight.\nGet enough sleep. Aim for 7 to 8 hours of sleep each night.\nLearn more about these tips to manage diabetes.\nTake medicines as prescribed\nWhat health problems can people with type 1 diabetes develop?\nPeople with type 1 diabetes can develop the same diabetes health problems as people with other types of diabetes. High blood glucose levels from diabetes can damage many parts of your body, including your",
+    "correct_claims": [
+        "Many people with diabetes also develop high blood pressure."
+    ],
+    "unverifiable_claims": [],
+    "potential_misinformation": [
+        "Diabetes occurs when Pancreas creates excess insulin."
+    ],
+    "verification_details": [
+        {
+            "claim": "Diabetes occurs when Pancreas creates excess insulin.",
+            "correction": "** Type 2 diabetes, the most common form, develops when the pancreas doesn't produce enough insulin and the body has trouble using it (insulin resistance).",
+            "severity": "Moderate",
+            "severity_score": 0.6
+        }
+    ],
+    "trustworthiness_score": 0.3093916959030704,
+    "uncertainty": 0.0,
+    "lower_bound": 0.3093916959030704,
+    "upper_bound": 0.3093916959030704
+}

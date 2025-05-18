@@ -1,0 +1,12 @@
+medical_db
+medical_data
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+TODO.md 
+*.log
+temp.json
+.env
+documents.json
+.DS_Store

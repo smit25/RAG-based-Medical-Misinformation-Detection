@@ -1,0 +1,12 @@
+nltk
+spacy
+sentence-transformers
+langchain-community
+langchain_google_genai
+langchain
+faiss-cpu
+PyPDF2
+unstructured
+rank_bm25
+transformers
+numpy==1.26.4
