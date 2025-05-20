@@ -127,21 +127,18 @@ class MisinformationDetector:
     
     def finalize_trust(self, state: Dict[str, Any]) -> Dict[str, Any]:
        
-        trust, uncert, low, high = exponential_penalty_ratio(
-            n_correct=len(state.get("correct_claims", [])),
-            severities_wrong=[d["severity_score"] for d in state.get("verification_details", [])],
-            confidences_unverif=state.get("unverifiable_confidences", []),
-            gamma=2.0,
-            lambda_penalty=0.5,
+        trustworthiness_score, uncertainty, lb, ub = compute_trust_and_uncertainty(
+            n_correct=corr_len,
+            n_unverif=unv_len,
+            n_wrong=mis_len,
+            severities=[ver["severity_score"] for ver in ver_dets],
+            confidences_unverif=result.get("unverifiable_confidences", []),
+            alpha=0.5,
+            beta=0.8,
             lambda_uncertainty=0.5
         )
-        return {
-            **state,
-            "trust_score": trust,
-            "uncertainty": uncert,
-            "trust_lower": low,
-            "trust_upper": high
-        }
+
+        return trustworthiness_score, uncertainty, lb, ub
     
 
     def detect_contradictions(self, state: VerificationState) -> VerificationState:
@@ -246,7 +243,6 @@ class MisinformationDetector:
                 — OUTPUT (repeat block for each claim) —
                 CLAIM: "<exact claim text>"
                 CORRECTION: "<paraphrased evidence or 'No correction available based on provided evidence.'>"
-                SEVERITY: <Minor / Moderate / Severe>
                 SEVERITY_SCORE: <0.00–1.00>
             """
         )
