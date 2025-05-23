@@ -3,7 +3,6 @@ from typing import List, Tuple, Optional
 
 
 
-
 def exponential_penalty_ratio(
     n_correct: int,
     n_unverif: int,
