@@ -451,60 +451,92 @@ class MisinformationDetector:
 
 if __name__ == "__main__":
     detector = MisinformationDetector()
-    # chunk transcript
-    severity_scores = []
-    query = "Diabetes occurs when Pancreas creates excess insulin. Many people with diabetes also develop high blood pressure."
-    result = detector.detect_misinformation(query)
+
+    with open("test_set.json", "r") as f:
+        test_set = json.load(f)
+
+    test_results = []
+
+    print(len(test_set))
     
-    corr_len = len(result.get("correct_claims", []))
-    unv_len = len(result.get("unverifiable_claims", []))
-    mis_len = len(result.get("potential_misinformation", []))
-    ver_dets = result.get("verification_details", [])
+    for test in test_set:
+        id = test.get("id", "-1")
+        severity_scores = []
+        query = test.get("transcript", "")
+        category = test.get("category", "general")
+        ground_severity = test.get("severity", [])
+        ground_unverifiable = test.get("unverifiable_confidence", [])
+        ground_trust = test.get("trustworthiness_score", -1.0)
+        ground_claims = test.get("claims", [])
+        # query = "Diabetes occurs when Pancreas creates excess insulin. Many people with diabetes also develop high blood pressure."
+        result = detector.detect_misinformation(query)
+        
+        corr_len = len(result.get("correct_claims", []))
+        unv_len = len(result.get("unverifiable_claims", []))
+        mis_len = len(result.get("potential_misinformation", []))
+        ver_dets = result.get("verification_details", [])
 
-    assert(corr_len + unv_len + mis_len == len(result.get("claims", [])), 
-           "Mismatch between claims and correct/unverifiable/misinformation claims length")
+        assert(corr_len + unv_len + mis_len == len(result.get("claims", [])), 
+            "Mismatch between claims and correct/unverifiable/misinformation claims length")
 
-    assert(mis_len == len(ver_dets), [], 
-           "Mismatch between potential misinformation and verification details length")
+        assert(mis_len == len(ver_dets), [], 
+            "Mismatch between potential misinformation and verification details length")
+        
+        if unv_len > 0:
+            result = detector.score_unverifiable_confidence(result)
+            print(f"Unverifiable Claim Len: {len(result['unverifiable_claims'])}")
+            print(f"Unverifiable Confidences: {result['unverifiable_confidences']}")
+            print(f"Ground Unverifiable Len: {len(ground_unverifiable)}")
+        
+        # for i in range(corr_len):
+        #     severity_scores.append(0)
+
+        # for i in range(unv_len):
+        #     severity_scores.append(0.5)
+        # print(ver_dets)
+        for i, ver in enumerate(ver_dets):
+            severity_scores.append(ver["severity_score"])
+
+        assert(len(severity_scores) == len(ground_severity),
+            "Mismatch between severity scores and ground severity scores")
+        
+        assert(len(result.get("unverifiable_confidences", [])) == unv_len,
+            "Mismatch between unverifiable confidences and unverifiable claims length")
+
+        trustworthiness_score, uncertainty, lb, ub = compute_trust_and_uncertainty(
+            n_correct=corr_len,
+            n_unverif=unv_len,
+            n_wrong=mis_len,
+            severities=[ver["severity_score"] for ver in ver_dets],
+            confidences_unverif=result.get("unverifiable_confidences", []),
+            alpha=0.5,
+            beta=0.8,
+            lambda_uncertainty=0.5
+        )
+
+        result.update({
+            "id":                    id,
+            "category":              category,
+            "ground_severity_scores": ground_severity,
+            "ground_unverifiable":   ground_unverifiable,
+            "ground_trustworthiness_score":          ground_trust,
+            "claims":                result.get("correct_claims", []) + result.get("unverifiable_claims", []) + result.get("potential_misinformation", []),
+            "severity_scores":       severity_scores,
+        })
+
+        # Trustworthiness score and Uncertainty to the result
+        result.update({
+            "trustworthiness_score": trustworthiness_score,
+            "uncertainty":            uncertainty,
+            "lower_bound":            lb,
+            "upper_bound":            ub,
+        })
     
-    if unv_len > 0:
-        result = detector.score_unverifiable_confidence(result)
-        print(f"Unverifiable Claims: {result['unverifiable_claims']}")
-        print(f"Unverifiable Confidences: {result['unverifiable_confidences']}")
-    
-    
-    # for i in range(corr_len):
-    #     severity_scores.append(0)
+        test_results.append(result)
 
-    # for i in range(unv_len):
-    #     severity_scores.append(0.5)
-    print(ver_dets)
-    for i, ver in enumerate(ver_dets):
-        severity_scores.append(ver["severity_score"])
-
-    trustworthiness_score, uncertainty, lb, ub = compute_trust_and_uncertainty(
-        n_correct=corr_len,
-        n_unverif=unv_len,
-        n_wrong=mis_len,
-        severities=[ver["severity_score"] for ver in ver_dets],
-        confidences_unverif=result.get("unverifiable_confidences", []),
-        alpha=0.5,
-        beta=0.8,
-        lambda_uncertainty=0.5
-    )
-
-
-    result.update({
-        "trustworthiness_score": trustworthiness_score,
-        "uncertainty":            uncertainty,
-        "lower_bound":            lb,
-        "upper_bound":            ub,
-    })
-
-    result_json = json.dumps(result, indent=4)
-    with open("result.json", "w") as f:
+    result_json = json.dumps(test_results, indent=4)
+    with open("result_test_set.json", "w") as f:
         f.write(result_json)
-
 
 
     print(f"Trustworthiness Score: {trustworthiness_score:.4f} +- {uncertainty:.4f} ({lb:.4f}, {ub:.4f})")
