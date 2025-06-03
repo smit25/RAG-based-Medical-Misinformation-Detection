@@ -11,3 +11,7 @@ temp.json
 documents.json
 .DS_Store
 test_set_casual.json
+test_set.json
+temp.py
+result_test_set.json
+evaluation_reference.txt

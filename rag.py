@@ -37,6 +37,7 @@ class VerificationState(TypedDict):
     unverifiable_claims: List[str]
     potential_misinformation: List[str]
     verification_details: List[Dict[str, Any]]
+    claim_labels: List[str]
 
 
 class MisinformationDetector:
@@ -87,7 +88,7 @@ class MisinformationDetector:
         self.ce = CrossEncoder("ivan-savchuk/cross-encoder-ms-marco-MiniLM-L-12-v2-tuned_mediqa-v1")
 
         self.bm25_weight = 0.3
-    
+
 
     def load_faiss_index(self, faiss_path: str) -> FAISS:
         """
@@ -156,6 +157,7 @@ class MisinformationDetector:
             — TASK —
             1. Extract every concrete factual claim about diabetes.
             • Tag each claim [ACCURATE], [INACCURATE], or [UNVERIFIABLE] based strictly on the evidence.
+            • If a claim refers to a general condition (e.g., “the disease”), and the evidence describes a specific subtype (e.g., “Type A of that disease”) with the same defining characteristic, treat the subtype description as SUPPORT for the general claim.
             • Number them 1., 2., 3., …
 
             2. Under POTENTIAL MISINFORMATION, list all claims tagged [INACCURATE]. If none, write “None.”
@@ -188,6 +190,8 @@ class MisinformationDetector:
         ] if potential_block else []
         correct_claims = []
         unverifiable_claims = []
+
+        claim_labels = []
         for line in claims_lines:
             m = re.match(r"\s*\d+\.\s*(.*?)\s*—\s*\[(ACCURATE|INACCURATE|UNVERIFIABLE)\]", line)
             if not m:
@@ -198,8 +202,12 @@ class MisinformationDetector:
                 unverifiable_claims.append(claim_text)
             elif flag == "ACCURATE":
                 correct_claims.append(claim_text)
+
+            claim_labels.append(flag)
+        
         return {
             **state,
+            "claim_labels": claim_labels,
             "correct_claims": correct_claims,
             "unverifiable_claims": unverifiable_claims,
             "potential_misinformation": inaccurate_claims
@@ -433,18 +441,13 @@ class MisinformationDetector:
             "potential_misinformation": None,
             "unverifiable_claims": None,
             "verification_details": None,
+            "claim_labels": None,
         }
         
         graph = self.create_verification_graph()
         final_state = graph.invoke(initial_state)
 
-        if not final_state.get("potential_misinformation"):
-            return {"misinformation_detected": False}
-
-        return {
-            "misinformation_detected": True,
-            **final_state
-        }
+        return final_state
 
 
 
@@ -475,6 +478,8 @@ if __name__ == "__main__":
         unv_len = len(result.get("unverifiable_claims", []))
         mis_len = len(result.get("potential_misinformation", []))
         ver_dets = result.get("verification_details", [])
+        if ver_dets is None:
+            ver_dets = []
 
         assert(corr_len + unv_len + mis_len == len(result.get("claims", [])), 
             "Mismatch between claims and correct/unverifiable/misinformation claims length")
@@ -510,9 +515,11 @@ if __name__ == "__main__":
             severities=[ver["severity_score"] for ver in ver_dets],
             confidences_unverif=result.get("unverifiable_confidences", []),
             alpha=0.5,
-            beta=0.8,
+            beta=0.7,
             lambda_uncertainty=0.5
         )
+
+        print("RES:", result.get("claim_labels", []))
 
         result.update({
             "id":                    id,
@@ -520,7 +527,9 @@ if __name__ == "__main__":
             "ground_severity_scores": ground_severity,
             "ground_unverifiable":   ground_unverifiable,
             "ground_trustworthiness_score":          ground_trust,
-            "claims":                result.get("correct_claims", []) + result.get("unverifiable_claims", []) + result.get("potential_misinformation", []),
+            "ground_claim_labels":    ground_claims,
+            "predicted_claim_labels": result.get("claim_labels", []),
+            # "claims":                result.get("correct_claims", []) + result.get("unverifiable_claims", []) + result.get("potential_misinformation", []),
             "severity_scores":       severity_scores,
         })
 
