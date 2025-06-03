@@ -1,0 +1,141 @@
+{
+    "accuracy": 0.8245614035087719,
+    "trustworthiness_pearson_r": 0.6377068653003872,
+    "trustworthiness_spearman_r": 0.7285132469251964,
+    "score_stats": [
+        {
+            "severity_mse": 0.01562499999999999,
+            "severity_mae": 0.08749999999999997,
+            "severity_wasserstein": 0.08749999999999997,
+            "id": 2
+        },
+        {
+            "severity_mse": 0.009999999999999995,
+            "severity_mae": 0.09999999999999998,
+            "severity_wasserstein": 0.09999999999999998,
+            "id": 3
+        },
+        {
+            "unverifiable_mse": 0.016250000000000004,
+            "unverifiable_mae": 0.1,
+            "unverifiable_wasserstein": 0.09999999999999999,
+            "id": 5
+        },
+        {
+            "unverifiable_mse": 0.6036333333333334,
+            "unverifiable_mae": 0.7766666666666667,
+            "unverifiable_wasserstein": 0.7766666666666667,
+            "id": 6
+        },
+        {
+            "severity_mse": 0.0,
+            "severity_mae": 0.0,
+            "severity_wasserstein": 0.0,
+            "id": 7
+        },
+        {
+            "unverifiable_mse": 0.04166666666666665,
+            "unverifiable_mae": 0.19999999999999996,
+            "unverifiable_wasserstein": 0.19999999999999996,
+            "id": 8
+        },
+        {
+            "unverifiable_mse": 0.13549999999999998,
+            "unverifiable_mae": 0.30999999999999994,
+            "unverifiable_wasserstein": 0.30999999999999994,
+            "id": 9
+        },
+        {
+            "severity_mse": 0.022500000000000006,
+            "severity_mae": 0.15000000000000002,
+            "severity_wasserstein": 0.15000000000000002,
+            "id": 10
+        },
+        {
+            "severity_mse": 0.0062499999999999995,
+            "severity_mae": 0.07500000000000001,
+            "severity_wasserstein": 0.07500000000000001,
+            "id": 15
+        },
+        {
+            "severity_mse": 0.0012500000000000022,
+            "severity_mae": 0.025000000000000022,
+            "severity_wasserstein": 0.025000000000000022,
+            "id": 18
+        },
+        {
+            "severity_mse": 0.0,
+            "severity_mae": 0.0,
+            "severity_wasserstein": 0.0,
+            "id": 23
+        },
+        {
+            "severity_mse": 0.009999999999999995,
+            "severity_mae": 0.09999999999999998,
+            "severity_wasserstein": 0.09999999999999998,
+            "unverifiable_mse": 0.30249999999999994,
+            "unverifiable_mae": 0.5499999999999999,
+            "unverifiable_wasserstein": 0.5499999999999999,
+            "id": 24
+        },
+        {
+            "severity_mse": 0.0012499999999999968,
+            "severity_mae": 0.024999999999999967,
+            "severity_wasserstein": 0.024999999999999967,
+            "id": 26
+        },
+        {
+            "severity_mse": 0.0625,
+            "severity_mae": 0.25,
+            "severity_wasserstein": 0.25,
+            "id": 28
+        },
+        {
+            "unverifiable_mse": 0.0037000000000000006,
+            "unverifiable_mae": 0.060000000000000005,
+            "unverifiable_wasserstein": 0.060000000000000005,
+            "id": 29
+        },
+        {
+            "severity_mse": 0.08065,
+            "severity_mae": 0.255,
+            "severity_wasserstein": 0.255,
+            "id": 31
+        },
+        {
+            "severity_mse": 0.022500000000000006,
+            "severity_mae": 0.15000000000000002,
+            "severity_wasserstein": 0.15000000000000002,
+            "id": 37
+        },
+        {
+            "severity_mse": 0.0025000000000000044,
+            "severity_mae": 0.050000000000000044,
+            "severity_wasserstein": 0.050000000000000044,
+            "id": 38
+        },
+        {
+            "severity_mse": 0.2025,
+            "severity_mae": 0.45,
+            "severity_wasserstein": 0.45,
+            "id": 39
+        },
+        {
+            "severity_mse": 0.12249999999999998,
+            "severity_mae": 0.35,
+            "severity_wasserstein": 0.35,
+            "unverifiable_mse": 0.4224999999999999,
+            "unverifiable_mae": 0.6499999999999999,
+            "unverifiable_wasserstein": 0.6499999999999999,
+            "id": 40
+        }
+    ],
+    "avg_metrics": {
+        "severity_mse": 0.037335,
+        "severity_mae": 0.13783333333333334,
+        "severity_wasserstein": 0.13783333333333334,
+        "unverifiable_mse": 0.21796428571428567,
+        "unverifiable_mae": 0.3780952380952381,
+        "unverifiable_wasserstein": 0.3780952380952381
+    }
+}
