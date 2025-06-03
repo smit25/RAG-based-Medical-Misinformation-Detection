@@ -19,12 +19,12 @@ import json
 nltk.download("punkt", quiet=True)
 
 # from ranker import Ranker
-# from inverter import Inverter
 from rus_ranker import RUSRanker
 from trustworthiness import (
     compute_trust_and_uncertainty,
     beta_posterior_trust
 )
+from claim_extraction import ClaimExtractor
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -428,9 +428,6 @@ class MisinformationDetector:
             for doc in documents:
                 final_docs.append(doc.page_content)
         
-        # for doc in final_docs:
-        #     print(doc)
-
         evidence_text = "\n".join([chunk for chunk in final_docs])
         
         # Initialize state
@@ -454,14 +451,18 @@ class MisinformationDetector:
 
 if __name__ == "__main__":
     detector = MisinformationDetector()
+    claim_extractor = ClaimExtractor()
+    # dummy_query = "Diabetes occurs when Pancreas creates excess insulin. Many people with diabetes also develop high blood pressure."
 
+    # Load transcript from file
     with open("test_set.json", "r") as f:
         test_set = json.load(f)
 
+    # -- Commenting since already done once for the test set --
+    # test_set, non_claim_test_set = claim_extractor.filter_relevant_sentences(test_set) 
+
     test_results = []
 
-    print(len(test_set))
-    
     for test in test_set:
         id = test.get("id", "-1")
         severity_scores = []
@@ -471,7 +472,6 @@ if __name__ == "__main__":
         ground_unverifiable = test.get("unverifiable_confidence", [])
         ground_trust = test.get("trustworthiness_score", -1.0)
         ground_claims = test.get("claims", [])
-        # query = "Diabetes occurs when Pancreas creates excess insulin. Many people with diabetes also develop high blood pressure."
         result = detector.detect_misinformation(query)
         
         corr_len = len(result.get("correct_claims", []))
@@ -493,12 +493,6 @@ if __name__ == "__main__":
             print(f"Unverifiable Confidences: {result['unverifiable_confidences']}")
             print(f"Ground Unverifiable Len: {len(ground_unverifiable)}")
         
-        # for i in range(corr_len):
-        #     severity_scores.append(0)
-
-        # for i in range(unv_len):
-        #     severity_scores.append(0.5)
-        # print(ver_dets)
         for i, ver in enumerate(ver_dets):
             severity_scores.append(ver["severity_score"])
 
